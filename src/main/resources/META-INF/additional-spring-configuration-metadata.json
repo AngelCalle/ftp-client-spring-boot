@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "ftp.host",
+    "type": "java.lang.String",
+    "description": "A description for 'ftp.host'"
+  },
+  {
+    "name": "ftp.port",
+    "type": "java.lang.String",
+    "description": "A description for 'ftp.port'"
+  },
+  {
+    "name": "ftp.user",
+    "type": "java.lang.String",
+    "description": "A description for 'ftp.user'"
+  },
+  {
+    "name": "ftp.password",
+    "type": "java.lang.String",
+    "description": "A description for 'ftp.password'"
+  },
+  {
+    "name": "ftp.file.extension.txt",
+    "type": "java.lang.String",
+    "description": "A description for 'ftp.file.extension.txt'"
+  },
+  {
+    "name": "ftp.file.extension.xlsx",
+    "type": "java.lang.String",
+    "description": "A description for 'ftp.file.extension.xlsx'"
+  }
+]}
