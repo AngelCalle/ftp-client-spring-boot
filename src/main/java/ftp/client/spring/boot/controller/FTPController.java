@@ -60,12 +60,12 @@ public class FTPController {
 		String fileName = name + extension;
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Disposition", "attachment; filename=" + fileName);
-
-		InputStreamResource inputStreamResource;
 		try {
-			inputStreamResource = ftpService.downloadFileToFTP(fileName);
-			return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
-					.contentType(MediaType.parseMediaType("application/vnd.ms-excel")).body(inputStreamResource);
+			return ResponseEntity.ok()
+					.headers(headers)
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+					.body(ftpService.downloadFileToFTP(fileName));
 		} catch (FTPErrors e) {
 			e.printStackTrace();
 			return ResponseEntity.internalServerError().body(null);

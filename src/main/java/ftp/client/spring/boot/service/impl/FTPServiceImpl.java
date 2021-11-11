@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -34,6 +35,9 @@ public class FTPServiceImpl implements IFTPService {
 
 	@Value("${ftp.password}")
 	private String password;
+
+	@Value("${ftp.directory}")
+	private String directory;
 
 	private FTPClient ftpconnection;
 
@@ -66,6 +70,11 @@ public class FTPServiceImpl implements IFTPService {
 
 		try {
 			ftpconnection.login(user, password);
+			ftpconnection.type(FTP.BINARY_FILE_TYPE);
+			ftpconnection.enterLocalPassiveMode();
+			if (!directory.equals("")) {
+				ftpconnection.changeWorkingDirectory(directory);
+			}
 		} catch (IOException e) {
 			ErrorMessage errorMessage = new ErrorMessage(-3,
 					"User=" + user + ", and the passwords=**** they were not valid for authentication.");
@@ -111,11 +120,17 @@ public class FTPServiceImpl implements IFTPService {
 			throw new FTPErrors(errorMessage);
 		}
 	}
-	
+
 	@Override
 	public InputStreamResource downloadFileToFTP(String fileName) throws FTPErrors {
 		try {
 			this.connectFTP(host, port, user, password);
+
+			// Imprime directorios
+			this.print(ftpconnection.listDirectories());
+			// Imprime archivos
+			this.print(ftpconnection.listFiles());
+
 			InputStream inputStream = this.ftpconnection.retrieveFileStream(fileName);
 			InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
 			this.disconnectFTP();
@@ -126,5 +141,10 @@ public class FTPServiceImpl implements IFTPService {
 			throw new FTPErrors(errorMessage);
 		}
 	}
-
+	
+	private void print(FTPFile[] listDirectory) {
+		for (FTPFile directory : listDirectory) {
+			log.info("Directory: {}", directory.getName());
+		}
+	}
 }
